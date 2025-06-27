@@ -1,6 +1,10 @@
 # repositories/vector_store.py
 from abc import ABC, abstractmethod
 
+
+from rag.domain.models.chunk import Chunk
+
+
 class BaseChunker(ABC):
     """
     Abstract base class for text chunkers.
@@ -14,7 +18,7 @@ class BaseChunker(ABC):
     """
 
     @abstractmethod
-    async def split_documents(self, text: str) -> list[str]:
+    async def split_documents(self, text: str) -> list[Chunk]:
         """
         Asynchronously split a single input text into a list of smaller text chunks.
 

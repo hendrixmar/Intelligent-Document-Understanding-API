@@ -2,6 +2,9 @@
 from abc import ABC, abstractmethod
 from typing import List
 
+from rag.domain.models.document import Document, DocumentCategory
+
+
 class BaseDocumentClassifier(ABC):
     """
     Abstract base class for document classification.
@@ -16,7 +19,7 @@ class BaseDocumentClassifier(ABC):
     """
 
     @abstractmethod
-    async def clustering(self, document: str) -> str:
+    async def clustering(self, document: Document) -> DocumentCategory | None:
         """
         Asynchronously classify a document into a cluster or category.
 

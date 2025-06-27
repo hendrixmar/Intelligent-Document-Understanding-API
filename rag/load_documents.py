@@ -26,10 +26,6 @@ def create_database():
                 data_type=DataType.TEXT,
             ),
             Property(
-                name="file_type",
-                data_type=DataType.TEXT,
-            ),
-            Property(
                 name="document_type",
                 data_type=DataType.TEXT,
             ),

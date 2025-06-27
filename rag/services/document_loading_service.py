@@ -1,27 +1,62 @@
-from rag.services.easy_ocr_provider import EasyOCRProvider
-from rag.services.standard_preprocess import StandardImagePreprocess
+from rag.domain.base_chunker import BaseChunker
+from rag.domain.base_classifier import BaseDocumentClassifier
+from rag.domain.base_document_loader import BaseDocumentLoader
+from rag.domain.base_entity_extraction import BaseEntityExtractor
+from rag.domain.base_vector_store import VectorStoreRepository
+from kink import inject
 
+@inject
 class DocumentService:
 
+    def __init__(
+        self,
+        document_loader: BaseDocumentLoader,
+        vector_store: VectorStoreRepository,
+        document_classifier: BaseDocumentClassifier,
+        entity_extractor: BaseEntityExtractor,
+        document_chunker: BaseChunker,
+    ):
+        self.document_loader = document_loader
+        self.vector_store = vector_store
+        self.entity_extractor = entity_extractor
+        self.document_classifier = document_classifier
+        self.document_chunker = document_chunker
 
-
-    def __init__(self, ):
-        pass
     async def add_document(self, raw_document: bytes):
-        ocr_provider = EasyOCRProvider()
-        preprocess_provider = StandardImagePreprocess()
-        all_text = []
-        for page in document:
-            preprocessed = preprocess_provider.preprocess_image(
-                load(page))
-            page_text = ocr_provider.detect_character(preprocessed)
-        # Cargar todos los documentos de la carpeta raiz
-        # Extraer el text con
-        # OCR pipeline
-        # llamaindex_semantic_chunker
-        # por cada chunk exrtraemos entidades
-        # le ponemos su categoria
-        # utilizamos knn para saber la categoria de todo el documento
-        #metemos el documento a la base con base_vector
 
-        ...
+        document = self.document_loader.load(raw_document)
+
+        for page in document.pages:
+            document_chunks = await self.document_chunker.split_documents(page.content)
+            page.chunks.extend(document_chunks)
+
+        results  = await self.document_classifier.clustering(
+            document
+        )
+        document.category = results
+        for page in document.pages:
+            for chunk in page.chunks:
+                result = await self.entity_extractor.extract_entities(chunk.text)
+                chunk.metadata.update(
+                    {
+                        "entities": result,
+                        "document_name":document.title,
+                        "document_type": results.value
+
+                    }
+                )
+
+
+        for page in document.pages:
+            await self.vector_store.add_documents(
+                [{**chunk.metadata, "document_content": chunk.text} for chunk in page.chunks]
+            )
+
+
+        return [{"key": str(results)}]
+
+
+
+
+
+

@@ -9,7 +9,7 @@ from rag.domain.base_ocr import BaseOpticalCharacterRecognizer
 from rag.domain.models.document import Document, DocumentMetadata
 from rag.domain.models.page import Page
 from PyPDF2 import PdfReader
-
+from kink import inject
 
 def get_pdf_metadata_from_bytes(pdf_bytes: bytes) -> dict:
     reader = PdfReader(io.BytesIO(pdf_bytes))
@@ -33,7 +33,7 @@ def _pil_image_to_bytes(pil_img: Image.Image, _format: str = "PNG") -> bytes:
     pil_img.save(buf, format=_format)
     return buf.getvalue()
 
-
+@inject
 class PdfLoader(BaseDocumentLoader):
 
     def __init__(
@@ -65,5 +65,7 @@ class PdfLoader(BaseDocumentLoader):
         preprocessed = self.preprocess_provider.preprocess_image(raw_page)
         page_text = self.ocr_provider.detect_character(preprocessed)
 
-        return Page(raw_content=raw_page, number=number, content=page_text)
+
+
+        return Page(number=number, content="\n".join(page_text))
 

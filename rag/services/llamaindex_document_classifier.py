@@ -1,8 +1,10 @@
+from collections import Counter
+
 import json_repair
 from llama_index.core.llms.function_calling import FunctionCallingLLM
 
 from rag.domain.base_classifier import BaseDocumentClassifier
-from rag.domain.models.document import Document
+from rag.domain.models.document import Document, DocumentCategory
 
 
 class LlamaIndexDocumentClassifier(BaseDocumentClassifier):
@@ -10,9 +12,9 @@ class LlamaIndexDocumentClassifier(BaseDocumentClassifier):
     def __init__(self, llm_provider: FunctionCallingLLM):
         self.llm_provider = llm_provider
 
-    async def clustering(self, document: Document) -> str:
+    async def clustering(self, document: Document) -> DocumentCategory | None:
         """Add documents with optional metadata to the vector store."""
-
+        result = []
         for page in document.pages:
             for chunk in page.chunks:
                 completion = await self.llm_provider.acomplete(
@@ -39,8 +41,21 @@ class LlamaIndexDocumentClassifier(BaseDocumentClassifier):
 
                         Text:
                         {document}
-                        """.format(document=document)
+                        """.format(document=chunk.text)
                 )
                 decoded_object = json_repair.repair_json(completion.text, return_objects=True)
+                result.append(decoded_object)
 
-        return decoded_object
+
+        try:
+            category, ocurrences = Counter(
+                (
+                    e.get("category", "no_category")
+                    for e in result)
+            ).most_common(1).pop()
+
+            return DocumentCategory(category)
+        except Exception:
+            return None
+
+

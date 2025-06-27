@@ -1,6 +1,9 @@
 from abc import ABC, abstractmethod
 from PIL import Image
 
+from rag.domain.models.document import Document
+
+
 class BaseDocumentLoader(ABC):
     """
     Abstract base class for document loaders.
@@ -15,7 +18,7 @@ class BaseDocumentLoader(ABC):
     """
 
     @abstractmethod
-    def load(self, pil_img: bytes) -> bytes:
+    def load(self, raw_image: bytes) -> Document:
         """
         Load the document and extract its main textual content.
 

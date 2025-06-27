@@ -6,6 +6,27 @@ from rag.domain.models.page import Page
 from uuid import uuid4, UUID
 
 
+from enum import Enum, StrEnum
+
+
+class DocumentCategory(StrEnum):
+    ADVERTISEMENT = "advertisement"
+    BUDGET = "budget"
+    EMAIL = "email"
+    FILE_FOLDER = "file_folder"
+    FORM = "form"
+    HANDWRITTEN = "handwritten"
+    INVOICE = "invoice"
+    LETTER = "letter"
+    MEMO = "memo"
+    NEWS_ARTICLE = "news_article"
+    PRESENTATION = "presentation"
+    QUESTIONNAIRE = "questionnaire"
+    RESUME = "resume"
+    SCIENTIFIC_PUBLICATION = "scientific_publication"
+    SCIENTIFIC_REPORT = "scientific_report"
+    SPECIFICATION = "specification"
+
 class DocumentMetadata(BaseModel):
     """Metadata associated with a document or file."""
     creation_date: datetime = Field(default_factory=datetime.now,
@@ -28,6 +49,7 @@ class DocumentMetadata(BaseModel):
 class Document(BaseModel):
     """A document composed of multiple pages."""
     id: UUID = Field(default_factory=uuid4)
-    title: Optional[str]
+    title: Optional[str] = None
+    category: DocumentCategory | None = None
     pages: List[Page] = Field(default_factory=list)
     metadata: Optional[DocumentMetadata] = Field()

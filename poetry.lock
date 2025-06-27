@@ -1827,6 +1827,21 @@ files = [
 ]
 
 [[package]]
+name = "kink"
+version = "0.8.1"
+description = "Dependency injection for python."
+optional = false
+python-versions = "<4.0,>=3.8"
+groups = ["main"]
+files = [
+    {file = "kink-0.8.1-py3-none-any.whl", hash = "sha256:c046be42395de6e18776daa93ac78280a70b3aa5c70b9ea5ca716cc71b3ff91a"},
+    {file = "kink-0.8.1.tar.gz", hash = "sha256:9310fa5860ad4df3cdd4a2b998517a718cbc83ed4975c51b8ebd60f640a9702c"},
+]
+
+[package.dependencies]
+typing_extensions = ">=4.9.0,<5.0.0"
+
+[[package]]
 name = "lazy-loader"
 version = "0.4"
 description = "Makes it easy to load subpackages and functions on demand."
@@ -6234,4 +6249,4 @@ propcache = ">=0.2.1"
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.10,<4"
-content-hash = "3fb0162a55acd244f34f78f4ba450a5a9a096b2a889aa014c30134502c81e77d"
+content-hash = "1ee0ed99858e8482a0e714431e05e162699747a2edfe45b929db902afa68cd47"

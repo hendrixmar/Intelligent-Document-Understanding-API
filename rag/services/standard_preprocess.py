@@ -16,7 +16,7 @@ class StandardImagePreprocess(BaseImagePreprocess):
         pil_image = Image.open(image_stream)
         image = np.array(pil_image)
 
-        if len(image.shape) == 3 and image.shape[2] == 3:
+        if len(image.shape) == 3:
             code = cv2.COLOR_BGR2GRAY if image.shape[2] == 3 else cv2.COLOR_RGB2GRAY
             gray = cv2.cvtColor(image, code)
         elif len(image.shape) == 2:  # already grayscale
