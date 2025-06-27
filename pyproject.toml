@@ -34,6 +34,7 @@ llama-index-extractors-entity = "^0.3.1"
 span-marker = "^1.7.0"
 openai = "^1.92.2"
 json-repair = "^0.47.3"
+pypdf2 = "^3.0.1"
 
 
 [tool.poetry.group.dev.dependencies]
