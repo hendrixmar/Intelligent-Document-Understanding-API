@@ -6,7 +6,7 @@ from typing import List
 class VectorStoreRepository(ABC):
 
     @abstractmethod
-    async def add_documents(self, documents: List[dict]) -> list[str]:
+    async def add_documents(self, documents: List[dict]) -> None:
         """Add documents with optional metadata to the vector store."""
 
     @abstractmethod

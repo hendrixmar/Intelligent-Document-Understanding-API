@@ -1,7 +1,7 @@
 from fastapi.routing import APIRouter
 
-from rag.web.api import echo, monitoring
+from rag.web.api import extract_entities, document
 
 api_router = APIRouter()
-api_router.include_router(monitoring.router)
-api_router.include_router(echo.router, prefix="/echo", tags=["echo"])
+api_router.include_router(document.router, prefix="/documents", tags=["ml"])
+api_router.include_router(extract_entities.router, prefix="/extract_entities", tags=["ml"])

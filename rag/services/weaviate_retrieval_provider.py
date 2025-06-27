@@ -4,7 +4,7 @@ import weaviate
 from fastapi import Depends
 from weaviate import WeaviateAsyncClient
 
-from rag.domain.base_entities_extraction import VectorStoreRepository
+from rag.domain.base_vector_store import VectorStoreRepository
 
 
 async def get_db_session() -> AsyncGenerator[WeaviateAsyncClient, None]:
@@ -32,11 +32,10 @@ class WeaviateRetrievalProvider(VectorStoreRepository):
         self.async_client = client
         self.documents_collection = client.collections.get("WineReviews")
 
-    async def add_documents(self, documents: list[dict]) -> str:
+    async def add_documents(self, documents: list[dict]) -> None:
         """Add documents with optional metadata to the vector store."""
 
         response = await self.documents_collection.data.insert_many(documents)
-        return str(response)
 
     async def similarity_search(self, query: str, k: int = 5) -> list[str]:
         """Return top-k documents relevant to the query."""
@@ -56,3 +55,6 @@ class WeaviateRetrievalProvider(VectorStoreRepository):
         )
 
         return [e.properties for e in response.objects]
+
+
+

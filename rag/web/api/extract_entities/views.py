@@ -6,11 +6,10 @@ from fastapi.responses import JSONResponse
 from PIL import Image
 from pydantic import BaseModel
 
-from rag.domain.base_entities_extraction import VectorStoreRepository
-from rag.services.chunking import semantic_chunk
+from rag.domain.base_vector_store import VectorStoreRepository
 from rag.services.ocr_pipeline import preprocess_image, run_easyocr_on_image
 from rag.services.weaviate_retrieval_provider import WeaviateRetrievalProvider
-from rag.web.api.echo.schema import Message
+from rag.web.api.extract_entities.schema import Message
 
 router = APIRouter()
 
@@ -27,7 +26,7 @@ async def send_echo_message(
 ) -> list[dict]:
     temp = await repository.similarity_search(incoming_message.message)
     """
-    Sends echo back to user.
+    Sends extract_entities back to user.
 
     :param incoming_message: incoming message.
     :returns: message same as the incoming.
@@ -46,7 +45,7 @@ async def send_echo_message(
     return temp
 
 
-@router.post("/extract_entities/")
+@router.post("")
 async def upload_file(file: UploadFile = File(...)):
     # Check file extension
     allowed_extensions = {".jpg", ".jpeg", ".png", ".pdf"}
@@ -66,7 +65,7 @@ async def upload_file(file: UploadFile = File(...)):
     preprocessed_image = preprocess_image(image)
     results = run_easyocr_on_image(preprocessed_image)
     # --------- Corregir texto ----
-    many_chunks = await semantic_chunk(results)
+
 
     # Now 'contents' is a bytes object containing the file data
     # You can process it, e.g. save to DB, analyze, etc.
