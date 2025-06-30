@@ -1,3 +1,5 @@
+from weaviate.collections.classes.grpc import MetadataQuery
+
 from rag.domain.base_chunker import BaseChunker
 from rag.domain.base_classifier import BaseDocumentClassifier
 from rag.domain.base_document_loader import BaseDocumentLoader
@@ -34,6 +36,7 @@ class DocumentService:
             document
         )
         document.category = results
+
         for page in document.pages:
             for chunk in page.chunks:
                 result = await self.entity_extractor.extract_entities(chunk.text)
@@ -46,17 +49,18 @@ class DocumentService:
                     }
                 )
 
-
         for page in document.pages:
             await self.vector_store.add_documents(
                 [{**chunk.metadata, "document_content": chunk.text} for chunk in page.chunks]
             )
 
-
-        return [{"key": str(results)}]
-
+        return document
 
 
 
 
+    async def search_document(self, query: str, k: int) -> list[dict]:
+
+        response = await self.vector_store.similarity_search(query, k=k)
+        return response
 

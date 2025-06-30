@@ -29,7 +29,7 @@ class VectorStoreRepository(ABC):
         ...
 
     @abstractmethod
-    async def similarity_search(self, query: str, k: int = 5) -> List[str]:
+    async def similarity_search(self, query: str, k: int = 5) -> List[dict]:
         """
         Perform a similarity search against the vector store using the given query.
 
@@ -38,6 +38,6 @@ class VectorStoreRepository(ABC):
             k (int): The number of top matching documents to return. Default is 5.
 
         Returns:
-            List[str]: A list of top-k document contents ranked by similarity to the query.
+            List[dict]: A list of top-k document contents ranked by similarity to the query.
         """
         ...

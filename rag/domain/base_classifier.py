@@ -24,7 +24,7 @@ class BaseDocumentClassifier(ABC):
         Asynchronously classify a document into a cluster or category.
 
         Parameters:
-            document (str): The input document content as a plain text string.
+            document (Document): The input document content as a plain text string.
 
         Returns:
             str: The name or identifier of the assigned cluster or category.

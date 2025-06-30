@@ -16,7 +16,7 @@ class BaseOpticalCharacterRecognizer(ABC):
     """
 
     @abstractmethod
-    def detect_character(self, image: np.ndarray, settings: dict | None = None) -> list[str]:
+    def detect_character(self, image: np.ndarray, settings: dict | None = None) -> str:
         """
         Detect and extract text characters from the given image.
 

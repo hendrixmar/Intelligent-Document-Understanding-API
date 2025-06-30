@@ -41,6 +41,20 @@ services:
     environment:
       RAG_HOST: 0.0.0.0
 
+  frontend:
+    build:
+      context: ./streamlit
+      dockerfile: ./Dockerfile
+    ports:
+      - "8501:8501"
+    depends_on:
+      - api
+    environment:
+      - API_URL=http://api:8000
+    volumes:
+      - .:/app
+    restart: unless-stopped
+
 
 volumes:
   files-db-data:

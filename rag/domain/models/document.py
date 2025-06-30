@@ -6,7 +6,7 @@ from rag.domain.models.page import Page
 from uuid import uuid4, UUID
 
 
-from enum import Enum, StrEnum
+from enum import StrEnum
 
 
 class DocumentCategory(StrEnum):

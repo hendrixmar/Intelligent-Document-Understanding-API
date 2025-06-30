@@ -4,12 +4,11 @@ import numpy as np
 from PIL import Image
 
 from rag.domain.base_image_preprocess import BaseImagePreprocess
-from rag.utils import fastapi_exception_handler
 
 
 class StandardImagePreprocess(BaseImagePreprocess):
 
-    @fastapi_exception_handler
+
     def preprocess_image(self, image: bytes) -> np.ndarray:
         image_stream = io.BytesIO(image)
 

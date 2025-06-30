@@ -33,7 +33,7 @@ class EasyOCRProvider(BaseOpticalCharacterRecognizer):
         self,
         image: np.ndarray,
         settings: EasyOCRConfig | None = None
-    ) -> list[str]:
+    ) -> str:
 
         results = self.reader.readtext(
             image,  # Or whatever final preprocessed image
@@ -41,4 +41,4 @@ class EasyOCRProvider(BaseOpticalCharacterRecognizer):
         )
 
         cleaned = [re.sub(r"[^\w\s.,;:-]", "", text[1]).strip() for text in results]
-        return cleaned
+        return " ".join(cleaned)

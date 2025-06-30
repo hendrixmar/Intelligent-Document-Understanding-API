@@ -36,6 +36,11 @@ openai = "^1.92.2"
 json-repair = "^0.47.3"
 pypdf2 = "^3.0.1"
 kink = "^0.8.1"
+streamlit = "^1.46.1"
+torch = "^2.7.1"
+torchvision = "^0.22.1"
+torchaudio = "^2.7.1"
+pytesseract = "^0.3.13"
 
 
 [tool.poetry.group.dev.dependencies]

@@ -12,7 +12,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 # Install system dependencies, including poppler-utils
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-    poppler-utils libgl1 libglib2.0-0  \
+    poppler-utils libgl1 libglib2.0-0 tesseract-ocr \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 # Copying requirements of a project
 COPY pyproject.toml poetry.lock /app/src/

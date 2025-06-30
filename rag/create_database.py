@@ -1,11 +1,16 @@
+
 import weaviate
-import pandas as pd
+
 from weaviate.classes.config import Configure, DataType, Property
 
 
-client = weaviate.connect_to_local()
 
 def create_database():
+    client = weaviate.connect_to_local(
+        host="weaviate",
+        port=8080
+    )
+
     if client.collections.exists("Documents"):
         return
 
@@ -41,26 +46,4 @@ def create_database():
         ]
     )
 
-create_database()
-documents_collection = client.collections.get("Documents")
-
-def insert():
-    # Iterating through the wine_reviews dataset and storing it all in an array to be inserted later
-    with documents_collection.batch.fixed_size() as batch:
-        for index, row in data.iterrows():
-            batch.add_object(properties={
-                "title": row["title"] + '.',
-                "description": row["description"],
-            })
-
-insert()
-
-response = documents_collection.query.near_text(
-    include_vector = True,
-    query= "laptop",
-    limit = 5,
-    return_metadata = ["creation_time", "last_update_time", "distance", "certainty", "score", "explain_score", "is_consistent"]
-)
-for e in response.objects:
-    print(e.properties)
-client.close()
+    client.close()

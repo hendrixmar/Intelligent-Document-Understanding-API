@@ -35,7 +35,7 @@ class Settings(BaseSettings):
 
     # Current environment
     environment: str = "dev"
-    openai_key: str | None = None
+    openai_api_key: str | None = None
     log_level: LogLevel = LogLevel.INFO
 
     model_config = SettingsConfigDict(

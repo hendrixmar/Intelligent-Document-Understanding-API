@@ -9,5 +9,4 @@ class Page(BaseModel):
     number: int
     content: str
     chunks: List[Chunk] = Field(default_factory=list)
-    metadata: Optional[dict] = Field(default_factory=dict)
 
