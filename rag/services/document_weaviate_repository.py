@@ -58,18 +58,6 @@ class DocumentWeaviateRepository(VectorStoreRepository):
         Args:
             documents (list[dict]): A list of document dictionaries containing metadata and content.
         """
-        for doc in documents:
-            mutate = False
-
-            for k, v in doc["entities"].items():
-                if k == "date":
-                    mutate = True
-                    break
-
-            if mutate:
-                temp = doc["entities"]["date"]
-                del doc["entities"]["date"]
-                doc["entities"]["current_date"] = temp
 
         await self.documents_collection.data.insert_many(documents)
 

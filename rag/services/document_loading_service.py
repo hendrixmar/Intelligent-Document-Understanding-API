@@ -1,5 +1,3 @@
-from weaviate.collections.classes.grpc import MetadataQuery
-
 from rag.domain.base_chunker import BaseChunker
 from rag.domain.base_classifier import BaseDocumentClassifier
 from rag.domain.base_document_loader import BaseDocumentLoader
@@ -32,19 +30,19 @@ class DocumentService:
             document_chunks = await self.document_chunker.split_documents(page.content)
             page.chunks.extend(document_chunks)
 
-        results  = await self.document_classifier.clustering(
+
+        document.category =  await self.document_classifier.clustering(
             document
         )
-        document.category = results
 
         for page in document.pages:
             for chunk in page.chunks:
-                result = await self.entity_extractor.extract_entities(chunk.text)
+                result = await self.entity_extractor.extract_entities(chunk.text, document.category)
                 chunk.metadata.update(
                     {
-                        "entities": result,
+                        "document_entities": result,
                         "document_name":document.title,
-                        "document_type": results.value
+                        "document_type": document.category
 
                     }
                 )

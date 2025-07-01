@@ -3,8 +3,10 @@ from typing import AsyncGenerator
 
 from fastapi import FastAPI
 from kink import di
+from llama_index.core.program import LLMTextCompletionProgram
 from llama_index.embeddings.openai import OpenAIEmbedding
 from llama_index.llms.openai import OpenAI
+from llama_index.core.output_parsers import PydanticOutputParser
 
 from rag.create_database import create_database
 from rag.domain.base_chunker import BaseChunker
@@ -45,7 +47,7 @@ async def lifespan_setup(
 
 def create_dependency_container():
     llm = OpenAI(
-        model="gpt-3.5-turbo",
+        model="gpt-4o",
         temperature=0,
         api_key=settings.openai_api_key
     )
